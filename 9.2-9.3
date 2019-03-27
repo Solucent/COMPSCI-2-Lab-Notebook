@@ -1,0 +1,78 @@
+#include "pch.h"
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+
+
+class Person
+{
+public:
+	Person(string n);
+	void befriend(Person p);
+	void unfriend(Person p);
+	string get_friendnames();
+	int get_friend_count();
+private:
+	string name;
+	string friends;
+	int friendPos;
+	int friendLength;
+	char c;
+	int friendNum = -1;
+};
+
+Person::Person(string n) {
+	name = n;
+	friends = " ";
+}
+void Person::befriend(Person p) {
+	friends.append(p.name);
+	friends.append(" ");
+}
+void Person::unfriend(Person p) {
+	friendPos = friends.find(p.name);
+	friendLength = p.name.length();
+	friends.erase(friendPos, friendLength + 1);
+}
+string Person::get_friendnames() {
+	cout << "Here are your current friends: ";
+	return friends;
+}
+int Person::get_friend_count() {
+	for (int i = 0; i < (friends.length()); i++)
+	{
+		c = friends.at(i);
+			if (isspace(c)) {
+				friendNum++;
+			}
+	}
+	cout << friends.length();
+	cout << "Your number of friends is: ";
+	return friendNum;
+}
+
+int main()
+{
+	string i;
+	cout << "Enter your name: ";
+	cin >> i;
+
+	Person USER(i);
+	Person JAMES("James");
+	Person JOHN("John");
+	Person JANELLE("Janelle");
+	Person PETER("Peter");
+
+
+
+	USER.befriend(JAMES);
+	USER.befriend(JOHN);
+	USER.befriend(JANELLE);
+	USER.befriend(PETER);
+	cout << USER.get_friendnames() << endl;
+	USER.unfriend(JOHN);
+	cout << USER.get_friendnames() << endl;
+	cout << USER.get_friend_count() << endl;
+}
