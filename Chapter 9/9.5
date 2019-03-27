@@ -1,0 +1,37 @@
+#include "pch.h"
+#include <iostream>
+
+using namespace std;
+
+class Battery {
+public:
+	Battery(double capacity);
+	void drain(double amount);
+	void charge();
+	double get_remaining_capacity();
+
+private:
+	double maxCap;
+	double currentCap;
+};
+
+Battery::Battery(double capacity) {
+	maxCap = capacity;
+	currentCap = capacity;
+}
+void Battery::drain(double amount) {
+	currentCap = currentCap - amount;
+}
+void Battery::charge() {
+	currentCap = maxCap;
+}
+double Battery::get_remaining_capacity() {
+	return currentCap;
+}
+int main() {
+	Battery A1(2500);
+	A1.drain(230.78);
+	cout << A1.get_remaining_capacity() << endl;
+	A1.charge();
+	cout << A1.get_remaining_capacity() << endl;
+}
