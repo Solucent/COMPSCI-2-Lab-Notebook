@@ -1,0 +1,77 @@
+#include "pch.h"
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+int main()
+{
+
+	int* users[100];
+	int master_account, id, copies, project;
+	int project_accounts[10];
+	char select;
+	bool menu = true;
+
+	master_account = 0;
+
+	for (int i = 0; i < 100; i++)
+	{
+		users[i] = &master_account;
+	}
+
+
+	while (menu == true) {
+		cout << "U)ser A)dministration Q)uit" << endl;
+		cin >> select;
+
+
+		if (select == 'U') {
+			cout << "Please enter your User ID and the number of copies you would like: ";
+			cin >> id >> copies;
+			*users[id] = *users[id] + copies;
+
+			cout << "You have requested " << *users[id] << " copies.";
+		}
+		else if (select == 'A') {
+			cout << "B)alance M)aster P)roject" << endl;
+			cin >> select;
+			if (select == 'B') {
+				cout << "Master Account Balance: " <<  endl << master_account << endl << endl;
+				cout << "Project Accounts Balance: ";
+
+				for (int i = 0; i < 10; i++) {
+					cout << project_accounts[i] << endl;
+				}
+			}
+			if (select == 'M') {
+				cout << "Please enter your User ID: ";
+				cin >> id;
+				users[id] = &master_account;
+			}
+			if (select == 'P') {
+				cout << "Please enter your User ID: ";
+				cin >> id;
+				cout << "Please enter your Project number: ";
+				cin >> project;
+				users[id] = &project_accounts[project];
+			}
+		}
+		else if (select == 'Q') {
+			menu = false;
+		}
+
+	}
+	return 0;
+}
+
+// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
+// Debug program: F5 or Debug > Start Debugging menu
+
+// Tips for Getting Started: 
+//   1. Use the Solution Explorer window to add/manage files
+//   2. Use the Team Explorer window to connect to source control
+//   3. Use the Output window to see build output and other messages
+//   4. Use the Error List window to view errors
+//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
+//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
