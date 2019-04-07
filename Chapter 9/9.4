@@ -1,0 +1,70 @@
+#include "pch.h"
+#include <iostream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+
+
+class Person
+{
+public:
+	Person(string n);
+	void befriend(Person* p);
+	void unfriend(Person* p);
+	void get_friendnames();
+	int get_friend_count();
+private:
+	string name;
+	vector<Person*> friends;
+};
+
+Person::Person(string n) {
+	name = n;
+}
+void Person::befriend(Person* p) {
+	friends.push_back(p);
+}
+void Person::unfriend(Person* p) {
+	for (int i = 0; i < friends.size(); i++) {
+		if (friends.at(i)->name == p->name) {
+			friends.erase(friends.begin() + i);
+		}
+	}
+}
+void Person::get_friendnames() {
+	cout << "Here are your current friends: ";
+	for (int i = 0; i < friends.size(); i++) {
+		cout << friends.at(i)->name << " ";
+	}
+	cout << endl;
+}
+int Person::get_friend_count() {
+	cout << "Your number of friends is: ";
+	return friends.size();
+}
+
+int main()
+{
+	string i;
+	cout << "Enter your name: ";
+	cin >> i;
+
+	Person USER(i);
+	Person JAMES("James");
+	Person JOHN("John");
+	Person JANELLE("Janelle");
+	Person PETER("Peter");
+
+
+
+	USER.befriend(&JAMES);
+	USER.befriend(&JOHN);
+	USER.befriend(&JANELLE);
+	USER.befriend(&PETER);
+	USER.get_friendnames();
+	USER.unfriend(&JOHN);
+	USER.get_friendnames();
+	cout << USER.get_friend_count() << endl;
+}
