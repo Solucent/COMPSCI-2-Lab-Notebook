@@ -1,0 +1,54 @@
+#include "pch.h"
+#include <iostream>
+#include <string>
+#include <sstream>
+
+using namespace std;
+
+int main() {
+	struct Student {
+		string fName, lName, input, grade;
+	
+	} student[10];
+
+	for (int i = 0; i < 10; i++) {
+		cout << "Please input the first name, last name, and course grade of the student: ";
+		//cin >> student[i].input;
+		getline(cin, student[i].input);
+
+		size_t found = student[i].input.find(" ");
+		student[i].fName = student[i].input.substr(0, found);
+
+		size_t found2 = student[i].input.find(" ", (found + 1));
+		student[i].lName = student[i].input.substr(found + 1, found2 - (found+ 1));
+
+		student[i].grade = student[i].input.substr((found2 + 1), 1);
+	}
+
+	cout << "Grading List:" << endl;
+	for (int i = 0; i < 10; i++) {
+		if (student[i].grade == "A") {
+			cout << student[i].fName << " " << student[i].lName << endl;
+		}
+	}
+	for (int i = 0; i < 10; i++) {
+		if (student[i].grade == "B") {
+			cout << student[i].fName << " " << student[i].lName << endl;
+		}
+	}
+	for (int i = 0; i < 10; i++) {
+		if (student[i].grade == "C") {
+			cout << student[i].fName << " " << student[i].lName << endl;
+		}
+	}
+	for (int i = 0; i < 10; i++) {
+		if (student[i].grade == "D") {
+			cout << student[i].fName << " " << student[i].lName << endl;
+		}
+	}
+	for (int i = 0; i < 10; i++) {
+		if (student[i].grade == "F") {
+			cout << student[i].fName << " " << student[i].lName << endl;
+		}
+	}
+}
