@@ -1,0 +1,81 @@
+// ConsoleApplication11.cpp : This file contains the 'main' function. Program execution begins and ends there.
+//
+
+#include "pch.h"
+#include <iostream>
+#include <ctime>
+#include <sstream>
+
+using namespace std;
+
+class Clock {
+public:
+	virtual int getHours();
+	int getMinutes();
+	string getTime();
+	void setAlarm(int h, int m);
+protected:
+	time_t current_time = time(0);
+	tm* local_time = localtime(&current_time);
+	int hours = local_time->tm_hour;
+	int minutes = local_time->tm_min;
+	int alarmHour, alarmMinute;
+};
+
+int Clock::getHours() {
+	return hours;
+}
+
+int Clock::getMinutes() {
+	return minutes;
+}
+
+string Clock::getTime() {
+	ostringstream sclock;
+	
+	sclock << "The current time is: " << getHours() << " hours and " << getMinutes() << " minutes." << endl;
+
+	if (getHours() > alarmHour) {
+		sclock << "ALARM" << endl;
+	}
+	else if (getHours() == alarmHour) {
+
+		if (getMinutes() >= alarmMinute) {
+			sclock << "ALARM" << endl;
+		}
+	}
+	
+	return sclock.str();
+}
+
+void Clock::setAlarm(int h, int m) {
+	alarmHour = h;
+	alarmMinute = m;
+}
+
+class Worldclock : public Clock {
+public: 
+	Worldclock(int j);
+	int getHours();
+
+private:
+	int timeOffset;
+};
+
+Worldclock::Worldclock(int j) {
+	timeOffset = j;
+}
+
+int Worldclock::getHours() {
+	return (hours + timeOffset);
+}
+
+int main()
+{
+	Clock Clock1;
+	Worldclock Clock2(5);
+	Clock1.setAlarm(4, 0);
+	Clock2.setAlarm(10, 10);
+	cout << Clock1.getTime();
+	cout << Clock2.getTime();
+}
