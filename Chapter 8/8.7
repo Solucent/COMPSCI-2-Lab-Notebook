@@ -1,0 +1,87 @@
+
+#include "pch.h"
+#include <iostream>
+#include <fstream>
+#include <string>
+
+using namespace std;
+
+void encryptFile(ifstream& in, ofstream& out, string k) {
+	char letter;
+
+	string alph = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	int pos;
+
+	while (in.get(letter)) {
+		if (isalnum(letter)) {
+
+			pos = alph.find(letter);
+			letter = k.at(pos);
+			out << letter;
+		}
+		else {
+			out << letter;
+		}
+	}
+}
+
+int main(int argc, char* argv[])
+{
+	int fileCount = 0;
+	ifstream inFile;
+	ofstream outFile;
+	string key;
+	string alphabet;
+
+	for (int i = 1; i < argc; i++) {
+		string arg = argv[i];
+		if (arg == "-d") {
+
+		}
+		else if (arg == "-kFEATHER") {
+			key = arg;
+			key.erase(0, 2);
+			for (int i = 0; i < key.length(); i++) {
+				char c = key.at(i);
+				for (int j = i + 1; j < key.length(); j++) {
+					if (c == key.at(j)) {
+						key.erase(j, 1);
+					}
+				}
+			}
+			alphabet = "ZYXWVUTSRQPONMLKJIHGFEDCDBA";
+			for (int i = 0; i < key.length(); i++) {
+				char c = key.at(i);
+				for (int j = i + 1; j < alphabet.length(); j++) {
+					if (c == alphabet.at(j)) {
+						alphabet.erase(j, 1);
+					}
+				}
+				
+			}
+			key = key.append(alphabet);
+		}
+		else {
+			fileCount++;
+			if (fileCount == 2) {
+				inFile.open(arg);
+				if (inFile.fail()) {
+					cout << "Error opening input file.";
+					return 0;
+				}
+			}
+			else if (fileCount == 3) {
+				outFile.open(arg);
+				if (outFile.fail()) {
+					cout << "Error opening output file.";
+					return 0;
+				}
+			}
+		}
+	}
+	if (fileCount != 3) {
+		cout << "Error Usage: crypt -d -k(KEYWORD) input output";
+		return 0;
+	}
+	encryptFile(inFile, outFile, key);	
+}
