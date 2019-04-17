@@ -1,0 +1,49 @@
+
+#include "pch.h"
+#include <iostream>
+#include <iomanip>
+#include <fstream>
+#include <string>
+
+using namespace std;
+
+int main()
+{
+	ifstream inFile;
+
+	char ch;
+	char letter = 'A';
+	int table = 0;
+	double letterTot = 0.00;
+	double total = 0.00;
+
+	inFile.open("encrypt.txt");
+
+	while (inFile.get(ch)) {
+		if (isalnum(ch)) {
+			total++;
+		}
+	}
+	inFile.close();
+
+	for (int i = 0; i < 26; i++) {
+
+		inFile.open("encrypt.txt");
+		while (inFile.get(ch)) {
+			if (isalnum(ch) && ch == letter) {
+				letterTot++;
+			}
+		}
+		inFile.close();
+		table++;
+		
+
+		cout << left << letter << ": " << setprecision(3) << setw(5) << (letterTot / total) * 100 << "%   ";
+		if (table == 4) {
+			cout << endl;
+			table = 0;
+		}
+		letter++;
+		letterTot = 0;
+	}
+}
