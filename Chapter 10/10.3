@@ -1,0 +1,101 @@
+
+#include "pch.h"
+#include <iostream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+class Appointment {
+public:
+	void getDesc(string d, int year, int month, int day);
+	virtual void occurs_on(int year, int month, int day);
+protected:
+	string desc;
+	int y, m, d;
+};
+
+void Appointment::getDesc(string des, int year, int month, int day) {
+	desc = des;
+	y = year;
+	m = month;
+	d = day;
+}
+
+void Appointment::occurs_on(int year, int month, int day) {
+	cout << "Wrong function";
+}
+
+class Onetime : public Appointment {
+	void occurs_on(int year, int month, int day) {
+		if (year == y && month == m && day == d) {
+			cout << desc << "   " << y << "/" << m << "/" << d << endl << endl;
+		}
+	}
+};
+
+class Daily : public Appointment {
+	void occurs_on(int year, int month, int day) {
+			cout << desc << "   " << y << "/" << m << "/" << d << endl << endl;
+		}
+};
+
+class Weekly : public Appointment {
+	void occurs_on(int year, int month, int day) {
+		if (month == m && day == d) {
+			cout << desc << "   " << y << "/" << m << "/" << d << endl << endl;
+		}
+	}
+};
+
+class Monthly : public Appointment {
+public:
+	void occurs_on(int year, int month, int day) {
+		if (day == d) {
+			cout << desc << "   " << y << "/" << m << "/" << d << endl << endl;
+		}
+	}
+};
+
+int main()
+{
+
+	int userYear = 0, userMonth = 0, userDay = 0;
+	vector<Appointment*> list;
+
+
+	Monthly one;
+	one.getDesc("See Dentist", 2019, 4, 24);
+	Weekly two;
+	two.getDesc("Visit Family", 2019, 5, 25);
+	Daily three;
+	three.getDesc("Go To Work", 2018, 8, 12);
+	Daily four;
+	four.getDesc("Hang out with Friends", 2019, 8, 13);
+	Onetime five;
+	five.getDesc("Go to DMV", 2020, 7, 28);
+	Onetime six;
+	six.getDesc("Doctor Check-Up", 2018, 1, 1);
+
+	list.push_back(&one);
+	list.push_back(&two);
+	list.push_back(&three);
+	list.push_back(&four);
+	list.push_back(&five);
+	list.push_back(&six);
+
+	cout << "Please enter a year: ";
+	cin >> userYear;
+	cout << "Please enter a month: ";
+	cin >> userMonth;
+	cout << "Please enter a day: ";
+	cin >> userDay;
+
+	cout << "Here are the following appointments on that date: " << endl << endl;
+
+	int maxSize = list.size();
+
+	for (int i = 0; i < maxSize; i++) {
+		list.at(i)->occurs_on(userYear, userMonth, userDay);
+	}
+}
