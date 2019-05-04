@@ -1,0 +1,52 @@
+// ConsoleApplication16.cpp : This file contains the 'main' function. Program execution begins and ends there.
+//
+#include "pch.h"
+#include <iostream>
+#include <vector>
+#include <string>
+
+
+using namespace std;
+
+
+void phoneCode(vector<char> phone[], int num[], string res, int index)
+{
+	if (index == -1) {
+		cout << res << " ";
+		return;
+	}
+
+	int digit = num[index];
+	int len = phone[digit].size();
+
+	for (int i = 0; i < len; i++) {
+		phoneCode(phone, num, phone[digit][i] + res, index - 1);
+	}
+}
+
+
+int main()
+{
+	int userNum;
+	vector<char> phone[] =
+	{
+		{}, {},	
+		{ 'A', 'B', 'C' },
+		{ 'D', 'E', 'F' },
+		{ 'G', 'H', 'I' },
+		{ 'J', 'K', 'L' },
+		{ 'M', 'N', 'O' },
+		{ 'P', 'Q', 'R', 'S'},
+		{ 'T', 'U', 'V' },
+		{ 'W', 'X', 'Y', 'Z'}
+	};
+	cout << "Please enter a four digit number: ";
+	cin >> userNum;
+	int num[4] = { userNum / 1000 % 10, userNum / 100 % 10, userNum / 10 % 10, userNum % 10 };
+
+	int n = sizeof(num) / sizeof(num[0]);
+
+	phoneCode(phone, num, string(""), n - 1);
+
+	return 0;
+}
