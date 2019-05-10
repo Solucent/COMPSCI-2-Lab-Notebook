@@ -1,0 +1,179 @@
+
+#include "pch.h"
+#include <iostream>
+#include <time.h>
+#include <array>
+
+using namespace std;
+
+struct Segment {
+	int train = 0;
+	Segment *front;
+	Segment *back;
+	Segment *frontNext;
+	Segment *backNext;	
+};
+
+void create(Segment trackin[], Segment trackout[]) {
+
+	for (int i = 1; i < 9; i++) {
+		trackin[i].front = &trackin[i + 1];
+		trackin[i].back = &trackin[i - 1];
+		trackin[i].frontNext = &trackout[i + 1];
+		trackin[i].backNext = &trackout[i - 1];
+		trackout[i].front = &trackout[i + 1];
+		trackout[i].back = &trackout[i - 1];
+		trackout[i].frontNext = &trackin[i + 1];
+		trackout[i].backNext = &trackin[i - 1];
+	}
+	trackin[0].front = &trackin[1];
+	trackin[0].back = &trackin[10];
+	trackin[0].frontNext = &trackout[1];
+	trackin[0].backNext = &trackout[10];
+	trackout[0].front = &trackout[1];
+	trackout[0].back = &trackout[10];
+	trackout[0].frontNext = &trackin[1];
+	trackout[0].backNext = &trackin[10];
+
+
+	for (int i = 0; i < 4; i++) {
+		int chance = rand() % 19;
+		int chance2 = rand() % 100;
+
+		if (chance < 10 && chance2 < 50) {
+			trackin[chance].train = -1;
+		}
+		else if (chance < 10 && chance2 >= 50) {
+			trackin[chance].train = 1;
+		}
+		else if (chance >= 10 && chance2 < 50) {
+			trackout[chance].train = -1;
+		}
+		else if (chance >= 10 && chance2 >= 50) {
+			trackout[chance].train = 1;
+		}
+	} 
+
+
+} 
+
+void move(Segment track[]) {
+	for (int i = 0; i < 9; i++) {
+		if (track[i].train == 1) {
+			if (track[i].front->train == 0) {
+				track[i].front->train = 1;
+				track[i].train = 0;
+			}
+			else if (track[i].front->train != 0) {
+				track[i].frontNext->train = 1;
+				track[i].train = 0;
+			}
+		}
+		else if (track[i].train == -1) {
+			if (track[i].back->train == 0) {
+				track[i].backNext->train = -1;
+				track[i].train = 0;
+			}
+			else if (track[i].back->train != 0) {
+				track[i].backNext->train = -1;
+				track[i].train = 0;
+			}
+		}
+	}
+}
+
+void display(Segment trackin[], Segment trackout[]) {
+
+	char row1[5] = { '-' };
+	char row2[5] = { '-' };
+	char row3[5] = { '-' };
+	char row4[5] = { '-' };
+
+	for (int i = 0; i < 5; i++) {
+		if (trackout[i].train == 0) {
+			row1[i] = '-';
+		}
+		else if (trackout[i].train == 1) {
+			row1[i] = '>';
+		}
+		else if (trackout[i + 5].train == -1) {
+			row1[i] = '<';
+		}
+
+		if (trackin[i].train == 0) {
+			row2[i] = '-';
+		}
+		else if (trackin[i].train == 1) {
+			row2[i] = '>';
+		}
+		else if (trackin[i + 5].train == -1) {
+			row2[i] = '<';
+		}
+
+		if (trackin[i + 5].train == 0) {
+			row3[i] = '-';
+		}
+		else if (trackin[i + 5].train == 1) {
+			row3[i] = '>';
+		}
+		else if (trackin[i + 5].train == -1) {
+			row3[i] = '<';
+		}
+
+		if (trackout[i + 5].train == 0) {
+			row4[i] = '-';
+		}
+		else if (trackout[i + 5].train == 1) {
+			row4[i] = '>';
+		}
+		else if (trackout[i + 5].train == -1) {
+			row4[i] = '<';
+		}
+	}
+	//first row
+	cout << "+--";
+	for (int i = 0; i < 5; i++) {
+		cout << row1[i] << "-";
+	}
+	cout << "--+" << endl;
+	cout << "|              |" << endl;
+
+	//second row
+	
+	cout << "|  ";
+	for (int i = 0; i < 5; i++) {
+		cout << row2[i] << "-";
+	}
+	cout << "  |" << endl;
+	cout << "| |          | |" << endl;
+	
+	//third row
+	cout << "|  ";
+	for (int i = 0; i < 5; i++) {
+		cout << row3[i] << "-";
+	}
+	cout << "  |" << endl;
+	cout << "|              |" << endl;
+
+	//fourth row
+	cout << "+--";
+	for (int i = 0; i < 5; i++) {
+		cout << row4[i] << "-";
+	}
+	cout << "--+" << endl << endl << endl;
+}
+
+int main()
+{
+	srand(time(NULL));
+	Segment inner[10];
+	Segment outer[10];
+	create(inner, outer);
+
+	for (int i = 0; i < 50; i++) {
+		display(inner, outer);
+		move(inner);
+		move(outer);
+		
+	}
+}
