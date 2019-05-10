@@ -1,4 +1,3 @@
-
 #include "pch.h"
 #include <iostream>
 #include <fstream>
@@ -6,21 +5,36 @@
 
 using namespace std;
 
-void encryptFile(ifstream& in, ofstream& out, string k) {
+void encryptFile(ifstream& in, ofstream& out, string k, bool d) {
 	char letter;
 
 	string alph = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	int pos;
 
-	while (in.get(letter)) {
-		if (isalnum(letter)) {
+	if (d == false) {
+		while (in.get(letter)) {
+			if (isalnum(letter)) {
 
-			pos = alph.find(letter);
-			letter = k.at(pos);
-			out << letter;
+				pos = alph.find(letter);
+				letter = k.at(pos);
+				out << letter;
+			}
+			else {
+				out << letter;
+			}
 		}
-		else {
-			out << letter;
+	}
+	else if (d == true) {
+		while (in.get(letter)) {
+			if (isalnum(letter)) {
+
+				pos = k.find(letter);
+				letter = alph.at(pos);
+				out << letter;
+			}
+			else {
+				out << letter;
+			}
 		}
 	}
 }
@@ -32,11 +46,12 @@ int main(int argc, char* argv[])
 	ofstream outFile;
 	string key;
 	string alphabet;
+	bool decrypt = false;
 
 	for (int i = 1; i < argc; i++) {
 		string arg = argv[i];
 		if (arg == "-d") {
-
+			decrypt = true;
 		}
 		else if (arg == "-kFEATHER") {
 			key = arg;
@@ -57,7 +72,7 @@ int main(int argc, char* argv[])
 						alphabet.erase(j, 1);
 					}
 				}
-				
+
 			}
 			key = key.append(alphabet);
 		}
@@ -83,5 +98,5 @@ int main(int argc, char* argv[])
 		cout << "Error Usage: crypt -d -k(KEYWORD) input output";
 		return 0;
 	}
-	encryptFile(inFile, outFile, key);	
+	encryptFile(inFile, outFile, key, decrypt);
 }
