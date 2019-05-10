@@ -1,0 +1,71 @@
+
+#include "pch.h"
+#include <iostream>
+#include <time.h>
+
+using namespace std;
+
+
+void newArray(int d[], int *list[], int index) {
+
+	int *p = d;
+	list[index] = p;
+}
+
+int * gather(int *list[]) {
+	static int data[10];
+
+	for (int j = 0; j < 10; j++) {
+		cout << "Data Set: " << endl;
+		for (int i = 0; i < 10; i++) {
+
+			data[i] = rand() % 100;
+			cout << data[i] << endl;
+		}
+		newArray(data, list, j);
+	}
+	return data;
+}
+
+void process(int d[], int &ave, int &max, int &min, int *list[]) {
+	ave = d[0], max = d[0], min = d[0];
+
+	for (int j = 0; j < 10; j++) {
+		for (int i = 1; i < 10; i++) {
+
+			if (d[i] > d[i - 1] && d[i] > max) {
+				max = d[i];
+			}
+			else if (d[i] < d[i - 1] && d[i] < min) {
+				min = d[i];
+			}
+			ave = ave + d[i];
+		}
+		ave = ave / 10;
+		cout << "Max: " << max << endl;
+		cout << "Min: " << min << endl;
+		cout << "Average: " << ave << endl;
+	}
+
+}
+
+
+
+int main()
+{
+	int average, max, min;
+	int *d = NULL;
+	int *arrayList[10];
+
+	srand(time(NULL));
+
+	for (int i = 0; i < 50; i++) {
+		int chance = rand() % 100;
+		if (chance >= 50) {
+			d = gather(arrayList);
+		}
+		else if (chance < 50) {
+			process(d, average, max, min, arrayList);
+		}
+	}
+}
