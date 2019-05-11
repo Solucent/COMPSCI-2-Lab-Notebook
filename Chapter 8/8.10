@@ -1,0 +1,128 @@
+#include "pch.h"
+#include <iostream>
+#include <fstream>
+#include <string>
+
+using namespace std;
+
+void encryptFile(ifstream& in, ofstream& out, string k, bool d) {
+
+	char keyTable[5][5];
+	int row1 = 0, row2 = 0, col1 = 0, col2 = 0;
+	char letter1, letter2;
+
+	for (int i = 0; i < 5; i++) {
+		for (int j = 0; j < 5; j++) {
+			keyTable[i][j] = k[j + (i * 5)];
+		}
+	}
+
+	if (d == false) {
+		while (in.get(letter1) && in.get(letter2)) {
+
+			for (int i = 0; i < 5; i++) {
+				for (int j = 0; j < 5; j++) {
+					if (isalnum(letter1) && letter1 == keyTable[i][j]) {
+						row1 = i, col1 = j;
+					}
+					if (isalnum(letter2) && letter2 == keyTable[i][j]) {
+						row2 = i, col2 = j;
+					}
+				}
+			}
+			if (row1 == row2 || col1 == col2) {
+				out << keyTable[row2][col2] << keyTable[row1][col1];
+			}
+			else if (row1 != row2 && col1 != col2) {
+				out << keyTable[row1][col2] << keyTable[row2][col1];
+			}
+		}
+	}
+	else if (d == true) {
+		while (in.get(letter1) && in.get(letter2)) {
+
+			for (int i = 0; i < 5; i++) {
+				for (int j = 0; j < 5; j++) {
+					if (isalnum(letter1) && letter1 == keyTable[i][j]) {
+						row1 = i, col1 = j;
+					}
+					if (isalnum(letter2) && letter2 == keyTable[i][j]) {
+						row2 = i, col2 = j;
+					}
+				}
+			}
+			cout << endl;
+			if (row1 == row2 || col1 == col2) {
+				out << keyTable[row2][col2] << keyTable[row1][col1];
+			}
+			else if (row1 != row2 && col1 != col2) {
+				out << keyTable[row1][col2] << keyTable[row2][col1];
+			}
+		}
+	}
+}
+
+int main(int argc, char* argv[])
+{
+	int fileCount = 0;
+	ifstream inFile;
+	ofstream outFile;
+	string key, keyFront, keyBack;
+	string alphabet;
+	bool decrypt = false;
+
+	for (int i = 1; i < argc; i++) {
+		string arg = argv[i];
+		if (arg == "-d") {
+			decrypt = true;
+		}
+		else if (arg == "-kPLAYFAIR") {
+			key = arg;
+			key.erase(0, 2);
+			for (int i = 0; i < key.length(); i++) {
+				char c = key.at(i);
+				for (int j = i + 1; j < key.length(); j++) {
+					if (c == key.at(j)) {
+						key.erase(j, 1);
+					}
+				}
+			}
+			alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+			for (int i = 0; i < key.length(); i++) {
+				char c = key.at(i);
+				for (int j = 0; j < alphabet.length(); j++) {
+					if (c == alphabet.at(j)) {
+						alphabet.erase(j, 1);
+					}
+					else if (alphabet.at(j) == 'J') {
+						alphabet.erase(j, 1);
+					}
+				}
+
+			}
+			key = key.append(alphabet);
+		}
+		else {
+			fileCount++;
+			if (fileCount == 2) {
+				inFile.open(arg);
+				if (inFile.fail()) {
+					cout << "Error opening input file.";
+					return 0;
+				}
+			}
+			else if (fileCount == 3) {
+				outFile.open(arg);
+				if (outFile.fail()) {
+					cout << "Error opening output file.";
+					return 0;
+				}
+			}
+		}
+	}
+	if (fileCount != 3) {
+		cout << "Error Usage: crypt -d -k(KEYWORD) input output";
+		return 0;
+	}
+	encryptFile(inFile, outFile, key, decrypt);
+}
