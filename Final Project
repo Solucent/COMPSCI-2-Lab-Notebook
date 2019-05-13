@@ -47,9 +47,7 @@ vector<char> DRM(string m) {
 		if (m1.at(i) > 90) {
 			m1.at(i) = m1.at(i) - 26;
 		}
-		cout << m1.at(i);
 	}
-
 	return m1;
 }
 
@@ -59,26 +57,30 @@ int main()
 	ifstream input;
 	ofstream output;
 	vector<char> encodedDRM;
+
 	input.open("DRM.txt");
-	input >> message;
-
-	//Checks to see if input is correct
-	if (message.length() > 15000) {
-		cout << "The encoded message is too large.";
-		return 0;
-	}
-	else if ((message.length() % 2) != 0) {
-		cout << "The message does not contain an even amount of characters.";
-		return 0;
-	}
-
-	encodedDRM = DRM(message);
-
-	//Outputs the encoded message to a text file
 	output.open("DecodedDRM.txt");
-	for (int i = 0; i < encodedDRM.size(); i++) {
-		output << encodedDRM.at(i);
-	}
 
+	while (getline(input, message)) {
+
+		//Checks to see if input is correct
+		if (message.length() > 15000) {
+			cout << "The encoded message is too large.";
+			return 0;
+		}
+		else if ((message.length() % 2) != 0) {
+			cout << "The message does not contain an even amount of characters.";
+			return 0;
+		}
+
+		encodedDRM = DRM(message);
+
+		//Outputs the encoded message to a text file
+		
+		for (int i = 0; i < encodedDRM.size(); i++) {
+			output << encodedDRM.at(i);
+		}
+		output << endl;
+	}
 	return 0;
 }
