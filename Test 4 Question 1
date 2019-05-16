@@ -1,0 +1,27 @@
+#include "pch.h"
+#include <iostream>
+#include <cmath>
+#include <queue>
+
+using namespace std;
+
+int main()
+{
+	queue<double> nums;
+
+	nums.push(100);
+	nums.push(2.5);
+	nums.push(-24);
+	nums.push(-36.34);
+
+	while (!nums.empty()) {
+		if (nums.front() > 0) {
+			nums.front() = sqrt(nums.front());
+		}
+		else if (nums.front() < 0) {
+			nums.front() = nums.front() * nums.front();
+		}
+		cout << nums.front() << endl;
+		nums.pop();
+	}
+}
